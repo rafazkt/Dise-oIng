@@ -10,25 +10,147 @@
     <div class="container">
       <h1>Gestor de Tareas</h1>
       <ul id="taskList"></ul>
-      <button class="add-task-btn" onclick="showTaskForm()">
-        Añadir Tarea
-      </button>
+      <button class="add-task-btn" onclick="showTaskForm()">Añadir Tarea</button>
     </div>
 
     <div id="taskForm" class="task-form-container">
       <h2 id="formTitle">Añadir Tarea</h2>
-      <input
-        type="text"
-        id="taskInput"
-        placeholder="Escribe una tarea"
-        aria-label="Campo para escribir una tarea"
-      />
+      <input type="text" id="taskInput" placeholder="Escribe una tarea" aria-label="Campo para escribir una tarea" />
       <div class="form-buttons">
         <button class="save-btn" onclick="saveTask()">Guardar</button>
         <button class="cancel-btn" onclick="cancelTask()">Cancelar</button>
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+      let editingTask = null;
+
+      function showTaskForm(task = null) {
+        document.getElementById('taskForm').style.display = 'block';
+        document.getElementById('taskInput').value = task ? task.firstChild.textContent : '';
+        document.getElementById('formTitle').textContent = task ? 'Editar Tarea' : 'Añadir Tarea';
+        editingTask = task;
+      }
+
+      function saveTask() {
+        const input = document.getElementById('taskInput');
+        if (input.value.trim() === '') return;
+
+        if (editingTask) {
+          editingTask.firstChild.textContent = input.value;
+        } else {
+          const li = document.createElement('li');
+          li.className = 'task';
+          li.innerHTML = `<span>${input.value}</span>
+                          <button class="edit-btn" onclick="showTaskForm(this.parentNode)">✏️</button>
+                          <button class="delete-btn" onclick="deleteTask(this)">🗑️</button>`;
+          document.getElementById('taskList').appendChild(li);
+        }
+        cancelTask();
+      }
+
+      function cancelTask() {
+        document.getElementById('taskForm').style.display = 'none';
+        document.getElementById('taskInput').value = '';
+        editingTask = null;
+      }
+
+      function deleteTask(button) {
+        button.parentNode.remove();
+      }
+
+      document.getElementById('taskInput').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') saveTask();
+      });
+    </script>
+
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(-45deg, #ff758c, #ff7eb3, #ff758c, #ff7eb3);
+        background-size: 400% 400%;
+        animation: gradientBG 8s ease infinite;
+      }
+      @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      .container {
+        width: 90%;
+        max-width: 400px;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+      .task {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        background: #fff3f3;
+        border-radius: 5px;
+        margin: 5px 0;
+      }
+      button {
+        cursor: pointer;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: 0.3s;
+      }
+      .add-task-btn {
+        background-color: #28a745;
+        color: white;
+        width: 100%;
+        margin-top: 10px;
+      }
+      .task-form-container {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+      .form-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+      .save-btn {
+        background-color: #007bff;
+        color: white;
+      }
+      .cancel-btn {
+        background-color: #dc3545;
+        color: white;
+      }
+      .edit-btn {
+        background-color: #ffc107;
+        border: none;
+      }
+      .delete-btn {
+        background-color: #ff3b3b;
+        border: none;
+      }
+      .edit-btn:hover, .delete-btn:hover {
+        opacity: 0.8;
+      }
+    </style>
   </body>
 </html>
