@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestor de Tareas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Gestor de Tareas</h1>
+      <ul id="taskList"></ul>
+      <button class="add-task-btn" onclick="showTaskForm()">
+        Añadir Tarea
+      </button>
+    </div>
+
+    <div id="taskForm" class="task-form-container">
+      <h2 id="formTitle">Añadir Tarea</h2>
+      <input
+        type="text"
+        id="taskInput"
+        placeholder="Escribe una tarea"
+        aria-label="Campo para escribir una tarea"
+      />
+      <div class="form-buttons">
+        <button class="save-btn" onclick="saveTask()">Guardar</button>
+        <button class="cancel-btn" onclick="cancelTask()">Cancelar</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
